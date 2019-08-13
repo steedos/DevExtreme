@@ -45,33 +45,36 @@ var pad = function(text, length, right) {
 
 function formatISO8601(date, skipZeroTime, skipTimezone) {
     var bag = [];
-    var isZeroTime = function() {
-        return date.getHours() + date.getMinutes() + date.getSeconds() + date.getMilliseconds() < 1
+
+    var isZeroTime = function () {
+        return date.getUTCHours() + date.getUTCMinutes() + date.getUTCSeconds() + date.getUTCMilliseconds() < 1;
     };
-    var padLeft2 = function(text) {
-        return pad(text, 2)
-    };
-    bag.push(date.getFullYear());
+
+    bag.push(date.getUTCFullYear());
     bag.push("-");
-    bag.push(padLeft2(date.getMonth() + 1));
+    bag.push(this.padLeft2(date.getUTCMonth() + 1));
     bag.push("-");
-    bag.push(padLeft2(date.getDate()));
+    bag.push(this.padLeft2(date.getUTCDate()));
+
     if (!(skipZeroTime && isZeroTime())) {
         bag.push("T");
-        bag.push(padLeft2(date.getHours()));
+        bag.push(this.padLeft2(date.getUTCHours()));
         bag.push(":");
-        bag.push(padLeft2(date.getMinutes()));
+        bag.push(this.padLeft2(date.getUTCMinutes()));
         bag.push(":");
-        bag.push(padLeft2(date.getSeconds()));
-        if (date.getMilliseconds()) {
+        bag.push(this.padLeft2(date.getUTCSeconds()));
+
+        if (date.getUTCMilliseconds()) {
             bag.push(".");
-            bag.push(pad(date.getMilliseconds(), 3))
+            bag.push(this.pad(date.getUTCMilliseconds(), 3));
         }
+
         if (!skipTimezone) {
-            bag.push("Z")
+            bag.push("Z");
         }
     }
-    return bag.join("")
+
+    return bag.join("");
 }
 
 function parseISO8601(isoString) {
